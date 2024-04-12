@@ -1700,6 +1700,13 @@
         ['enable_lto=="true"', {
           'ldflags': [ '-fno-lto' ],
         }],
+        ['OS=="win"', {
+          'msbuild_settings': {
+            'Link': {
+              'EnableCOMDATFolding': 'false', # /OPT:NOICF
+            },
+          },
+        }],
       ],
     },  # mksnapshot
     {

@@ -1319,6 +1319,11 @@
             'winmm.lib',
             'Ws2_32.lib',
           ],
+          'msbuild_settings': {
+            'Link': {
+              'EnableCOMDATFolding': 'false', # /OPT:NOICF
+            },
+          },
         }],
         # Avoid excessive LTO
         ['enable_lto=="true"', {

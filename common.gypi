@@ -137,9 +137,9 @@
           'v8_enable_handle_zapping': 1,
           'conditions': [
             ['node_shared != "true"', {
-              'MSVC_runtimeType': 1,    # MultiThreadedDebug (/MTd)
+              'MSVC_runtimeType': 'MultiThreadedDebug',    # /MTd
             }, {
-              'MSVC_runtimeType': 3,    # MultiThreadedDebugDLL (/MDd)
+              'MSVC_runtimeType': 'MultiThreadedDebugDLL', # /MDd
             }],
           ],
         },
@@ -155,16 +155,16 @@
             'ldflags': [ '-fPIC' ]
           }],
         ],
-        'msvs_settings': {
-          'VCCLCompilerTool': {
-            'BasicRuntimeChecks': 3,        # /RTC1
+        'msbuild_settings': {
+          'ClCompile': {
+            'BasicRuntimeChecks': 'EnableFastChecks',  # /RTC1
             'MinimalRebuild': 'false',
             'OmitFramePointers': 'false',
-            'Optimization': 0,              # /Od, no optimization
+            'Optimization': 'Disabled',                # /Od, no optimization
             'RuntimeLibrary': '<(MSVC_runtimeType)',
           },
-          'VCLinkerTool': {
-            'LinkIncremental': 2, # enable incremental linking
+          '': {
+            'LinkIncremental': 'true', # Enable incremental linking
           },
         },
         'xcode_settings': {
@@ -178,9 +178,9 @@
           'pgo_use': ' -fprofile-use -fprofile-correction ',
           'conditions': [
             ['node_shared != "true"', {
-              'MSVC_runtimeType': 0    # MultiThreaded (/MT)
+              'MSVC_runtimeType': 'MultiThreaded'    # /MT
             }, {
-              'MSVC_runtimeType': 2   # MultiThreadedDLL (/MD)
+              'MSVC_runtimeType': 'MultiThreadedDLL' # /MD
             }],
             ['llvm_version=="0.0"', {
               'lto': ' -flto=4 -fuse-linker-plugin -ffat-lto-objects ', # GCC
@@ -243,19 +243,19 @@
             'ldflags': [ '-fPIC' ]
           }],
         ],
-        'msvs_settings': {
-          'VCCLCompilerTool': {
+        'msbuild_settings': {
+          'ClCompile': {
             'conditions': [
               ['target_arch=="arm64"', {
-                'FloatingPointModel': 1 # /fp:strict
+                'FloatingPointModel': 'Strict' # /fp:strict
               }]
             ],
-            'EnableFunctionLevelLinking': 'true',
-            'EnableIntrinsicFunctions': 'true',
-            'FavorSizeOrSpeed': 1,          # /Ot, favor speed over size
-            'InlineFunctionExpansion': 2,   # /Ob2, inline anything eligible
+            'FunctionLevelLinking': 'true',
+            'IntrinsicFunctions': 'true',
+            'FavorSizeOrSpeed': 'Speed',              # /Ot, favor speed over size
+            'InlineFunctionExpansion': 'AnySuitable', # /Ob2, inline anything eligible
             'OmitFramePointers': 'true',
-            'Optimization': 3,              # /Ox, full optimization
+            'Optimization': 'Full',                   # /Ox, full optimization
             'RuntimeLibrary': '<(MSVC_runtimeType)',
             'RuntimeTypeInfo': 'false',
           }
@@ -282,8 +282,8 @@
         'cflags!': ['-Werror'],
       }],
     ],
-    'msvs_settings': {
-      'VCCLCompilerTool': {
+    'msbuild_settings': {
+      'ClCompile': {
         'AdditionalOptions': [
           '/Zc:__cplusplus',
           # The following option enables c++20 on Windows. This is needed for V8 v12.4+
@@ -292,29 +292,29 @@
           '/Zm2000',
         ],
         'BufferSecurityCheck': 'true',
-        'DebugInformationFormat': 1,          # /Z7 embed info in .obj files
-        'ExceptionHandling': 0,               # /EHsc
+        'DebugInformationFormat': 'OldStyle', # /Z7 embed info in .obj files
+        'ExceptionHandling': 'Sync',          # /EHsc
         'MultiProcessorCompilation': 'true',
         'StringPooling': 'true',              # pool string literals
         'SuppressStartupBanner': 'true',
-        'WarnAsError': 'false',
-        'WarningLevel': 3,                    # /W3
+        'TreatWarningAsError': 'false',
+        'WarningLevel': 'Level3',             # /W3
       },
-      'VCLinkerTool': {
+      'Link': {
         'target_conditions': [
           ['_type=="executable"', {
-            'SubSystem': 1,                   # /SUBSYSTEM:CONSOLE
+            'SubSystem': 'Console',           # /SUBSYSTEM:CONSOLE
           }],
         ],
         'conditions': [
           ['target_arch=="ia32"', {
-            'TargetMachine' : 1,              # /MACHINE:X86
+            'TargetMachine' : 'MachineX86',   # /MACHINE:X86
           }],
           ['target_arch=="x64"', {
-            'TargetMachine' : 17,             # /MACHINE:X64
+            'TargetMachine' : 'MachineX64',   # /MACHINE:X64
           }],
           ['target_arch=="arm64"', {
-            'TargetMachine' : 0,              # NotSet. MACHINE:ARM64 is inferred from the input files.
+            'TargetMachine' : 'NotSet',       # MACHINE:ARM64 is inferred from the input files.
           }],
         ],
         'GenerateDebugInformation': 'true',
